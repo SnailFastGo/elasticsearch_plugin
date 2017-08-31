@@ -58,7 +58,7 @@ public class MyRestAction extends BaseRestHandler {
         LOGGER.info("My Rest Action Handler");  
         Map<String, String> params = request.params();
         LOGGER.info("Param : {}", params);
-        String actionParam = request.param("action");
+        final String actionParam = request.param("action");
         LOGGER.info("actionParam : {}", actionParam);
         RestChannelConsumer res = new RestChannelConsumer(){
             @Override
@@ -67,6 +67,9 @@ public class MyRestAction extends BaseRestHandler {
                 builder.startObject();  
                 //返回给页面的信息
                 builder.field("message", "This is my first plugin");
+                if(null != actionParam && actionParam.trim().length() > 0){
+                    builder.field("接收到参数actionParam", actionParam);
+                }
                 builder.endObject();  
                 channel.sendResponse(new BytesRestResponse(RestStatus.OK, builder));
             }
